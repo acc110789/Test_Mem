@@ -1,0 +1,6 @@
+framework module Test_mem_framework {
+    umbrella header "Test_mem_framework.h"
+
+    export *
+    module * { export * }
+}
