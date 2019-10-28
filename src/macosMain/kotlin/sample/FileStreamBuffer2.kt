@@ -11,6 +11,12 @@ class FileStreamBuffer2 constructor(val size: Int) {
         return arrayData[index]
     }
 
+    fun opaque() {
+        (0 until size).forEach {
+            arrayData[it] = 100
+        }
+    }
+
     fun set(index: Int, value: Byte) {
         arrayData[index] = value
     }

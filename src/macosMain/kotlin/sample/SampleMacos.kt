@@ -6,6 +6,8 @@ import kotlinx.cinterop.get
 import kotlinx.cinterop.memScoped
 import platform.darwin.*
 import platform.posix.uint8_tVar
+import kotlin.native.concurrent.freeze
+import kotlin.native.concurrent.isFrozen
 import kotlin.native.internal.GC
 
 fun hello(): String = "Hello, Kotlin/Native!"
@@ -24,16 +26,15 @@ fun main() {
 
         println("start gen object")
 
-        repeat(400) {
+        repeat(800) {
             //1M
             val size = 4 * 1024 * 1024
             val buffer = FileStreamBuffer(size)
             buffer.opaque()
-
             fileBufferList.add(buffer)
         }
 
-        println("start gen object end")
+        println("gen object end")
 
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 4000 * NSEC_PER_MSEC.toLong()), mainQueue) {
             println("release fileBufferList")
@@ -45,6 +46,17 @@ fun main() {
 //            invokeGC()
         }
     }
+
+//    test()
+}
+
+fun test() {
+    val obj = TestOneClass()
+    obj.hello()
+    obj.freeze()
+    println("after freeze")
+    println("is frozen: ${obj.isFrozen}")
+    obj.hello()
 }
 
 private fun invokeGC() {
@@ -55,7 +67,7 @@ private fun invokeGC() {
         GC.collect()
     }
 
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 2000 * NSEC_PER_MSEC.toLong()), mainQueue) {
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 5000 * NSEC_PER_MSEC.toLong()), mainQueue) {
         println("GC again ^^")
         GC.collect()
     }
