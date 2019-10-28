@@ -13,8 +13,8 @@ import kotlin.native.internal.GC
 fun hello(): String = "Hello, Kotlin/Native!"
 
 val fileBufferList = mutableListOf<FileStreamBuffer>()
-val fileBufferList2 = mutableListOf<FileStreamBuffer2>()
-val fileBufferList3 = mutableListOf<FileStreamBuffer3>()
+//val fileBufferList2 = mutableListOf<FileStreamBuffer2>()
+//val fileBufferList3 = mutableListOf<FileStreamBuffer3>()
 
 fun main() {
 
@@ -38,11 +38,11 @@ fun main() {
 
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 4000 * NSEC_PER_MSEC.toLong()), mainQueue) {
             println("release fileBufferList")
-            fileBufferList2.clear()
+//            fileBufferList2.clear()
             fileBufferList.clear()
 
-            fileBufferList3.forEach { it.free() }
-            fileBufferList3.clear()
+//            fileBufferList3.forEach { it.free() }
+//            fileBufferList3.clear()
 //            invokeGC()
         }
     }
